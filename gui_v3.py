@@ -1,3 +1,4 @@
+from lib2to3.pytree import convert
 from tkinter import*
 
 
@@ -68,22 +69,41 @@ class Converter:
         """ Checks temperature is valid either invokes a calc func or custom error
         """
 
-        #retrieve temperature to be converted
+        # Retrieve temperature to be converted
         to_convert = self.temp_entry.get()
+
+        # reset label and entry box ( if we had an error)
+        self.answer_error.config(fg="#004C99", font=("Arial", 13, "bold"))
+        self.temp_entry.config(bg="#FFFFFFF")
+
+        error = f"Enter a number more then / equal to {min_temp}"
+        has_errors = "no"
+
 
         # checks amount to be converted is a number above zero
         try:
             to_convert = float(to_convert)
             if to_convert >= min_temp:
                 error = ""
+                self.convert(min_temp)
             else:
-                error=""
+                error = "Too low"
 
         except ValueError:
             error = "Please enter a number!"
 
+        # display the error if necessary
+        if error != "":
+            self.answer_error.config(text=error, fg="#9C0000")
+            self.temp_entry.config(bg="#F4CCCC")
+            self.temp_entry.delete(0, END)
 
+    def convert(self, min_temp, to_convert):
 
+        if min_temp == c.ABS_ZERO_CELSIUS:
+            self.answer_error.config(text=f"Converting {to_convert} C° to F°")
+        else:
+            self.answer_error.config(text=f"Converting {to_convert} F° to C°")
 
 
 
