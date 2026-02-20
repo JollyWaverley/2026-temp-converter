@@ -44,7 +44,7 @@ class Converter:
 
         #button list (button text| bg colour | command | row | column )
         button_details_list = [
-            ["to Celsius", "#990099",lambda :self.check_temp(c.ABS_ZERO_FAHRENHEIT),0,0],
+            ["To Celsius", "#990099",lambda :self.check_temp(c.ABS_ZERO_FAHRENHEIT),0,0],
             ["To Fahrenheit","#009900", lambda :self.check_temp(c.ABS_ZERO_CELSIUS),0,1],
             ["Help / Info","#CC6600","",1,0],
             ["History / Export", "#004C99","",1,1]
@@ -103,12 +103,13 @@ class Converter:
         if min_temp == c.ABS_ZERO_CELSIUS:
             self.answer_error.config(text=f"Converting {to_convert} C° to F°")
         else:
+
             self.answer_error.config(text=f"Converting {to_convert} F° to C°")
 
 
 def round_ans(val):
 
-    """Round the tempretures to teh nearest degree
+    """Round the temperatures to teh nearest degree
     :param val Number would be rounded
     :return: Number to nearest degree"""
 
@@ -117,7 +118,7 @@ def round_ans(val):
 
 def to_celsius(to_convert):
     """Converts from f to c
-    param to_convert : temprature to be converted into f
+    param to_convert : temperature to be converted into f
     :return: Converted in c"""
 
     answer = (to_convert - 32) * 5 / 9
@@ -137,7 +138,25 @@ def to_fahrenheit(to_convert):
 
 
 
-# Main Routine / Testing starts here
+# # Main Routine / Testing starts here
+# to_c_test = [0, 100, -459]
+# to_test_f = [0, 100, 40, -273]
+#
+# for item in to_test_f:
+#     ans = to_fahrenheit(item)
+#     print(f"{item} c is {ans} F")
+#
+# print()
+#
+# for item in to_c_test:
+#     ans = to_celsius(item)
+#     print(f"{item} F is {ans} c")
+
+
+
+
+
+# main routine
 if __name__ == "__main__":
     root = Tk()
     root.title("temperature converter")
