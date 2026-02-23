@@ -1,9 +1,7 @@
 
 from tkinter import*
-
-
 import  all_constants as c
-
+import  convertion_rounding as cr
 
 class Converter:
 
@@ -11,6 +9,8 @@ class Converter:
     def __init__(self):
 
         """temperature converter gui"""
+
+        self.all_calculations_list = []
 
         self.temp_frame = Frame (padx=10, pady=10)
         self.temp_frame.grid()
@@ -63,40 +63,9 @@ class Converter:
             self.button_ref_list.append(self.make_button)
 
         #retrieve 'history / export' button and disable it at the start
+        self.to_history_button = self.button_ref_list[3]
         self.to_history_button = self.button_ref_list[3].config(state=DISABLED)
 
-    def check_temp(self,min_temp):
-        """ Checks temperature is valid either invokes a calc func or custom error
-        """
-
-        # Retrieve temperature to be converted
-        to_convert = self.temp_entry.get()
-
-        # reset label and entry box ( if we had an error)
-        self.answer_error.config(fg="#004C99", font=("Arial", 13, "bold"))
-        self.temp_entry.config(bg="#FFFFFFF")
-
-        error = f"Enter a number more then / equal to {min_temp}"
-        has_errors = "no"
-
-
-        # checks amount to be converted is a number above zero
-        try:
-            to_convert = float(to_convert)
-            if to_convert >= min_temp:
-                error = ""
-                self.convert(min_temp)
-            else:
-                error = "Too low"
-
-        except ValueError:
-            error = "Please enter a number!"
-
-        # display the error if necessary
-        if error != "":
-            self.answer_error.config(text=error, fg="#9C0000")
-            self.temp_entry.config(bg="#F4CCCC")
-            self.temp_entry.delete(0, END)
 
     def convert(self, min_temp, to_convert):
 
@@ -107,56 +76,57 @@ class Converter:
             self.answer_error.config(text=f"Converting {to_convert} F° to C°")
 
 
-def round_ans(val):
+    def check_temp(self, min_temp):
+        """ Checks temperature is valid either invokes a calc func or custom error
+            """
 
-    """Round the temperatures to teh nearest degree
-    :param val Number would be rounded
-    :return: Number to nearest degree"""
+        # Retrieve temperature to be converted
+        to_convert = self.temp_entry.get()
 
-    var_rounded = (val * 2 + 1) // 2
-    return "{:.0f}".format(var_rounded)
+        # reset label and entry box ( if we had an error)
+        self.answer_error.config(fg="#004C99", font=("Arial", 13, "bold"))
+        self.temp_entry.config(bg="#FFFFFF")
 
-def to_celsius(to_convert):
-    """Converts from f to c
-    param to_convert : temperature to be converted into f
-    :return: Converted in c"""
+        error = f"Enter a number more then / equal to {min_temp}"
+        has_errors = "no"
 
-    answer = (to_convert - 32) * 5 / 9
-    return round_ans(answer)
+        # checks amount to be converted is a number above zero
+        try:
+            to_convert = float(to_convert)
+            if to_convert >= min_temp:
+                self.convert(min_temp, to_convert)
+            else:
+                has_errors = "yes"
 
+        except ValueError:
+            has_errors = "yes"
 
-def to_fahrenheit(to_convert):
-    """
-    Converts from c to f
-    : param to_ convert : temperature to be in c
-    : return : Converted temperature in f
-    """
-    answer = to_convert * 1.8 + 32
-    return  round_ans(answer)
-
-
-
-
-
-# # Main Routine / Testing starts here
-# to_c_test = [0, 100, -459]
-# to_test_f = [0, 100, 40, -273]
-#
-# for item in to_test_f:
-#     ans = to_fahrenheit(item)
-#     print(f"{item} c is {ans} F")
-#
-# print()
-#
-# for item in to_c_test:
-#     ans = to_celsius(item)
-#     print(f"{item} F is {ans} c")
+        # display the error if necessary
+        has_errors == "yes"
+        self.answer_error.config(text=error, fg="#9C0000", font=("Arial", 10, "bold"))
+        self.temp_entry.config(bg="#F4CCCC")
+        self.temp_entry.delete(0, END)
 
 
+    def convert(self, min_temp, to_convert):
+        """"""
+        if min_temp == c.ABS_ZERO_CELSIUS:
+            answer = cr.to_fahrenheit(to_convert)
+            answer_statement = f"{to_convert} C is {answer} F"
+            self.answer_error.config(text=f"Converting {answer} C° to F°")
+        else:
+            answer = cr.to_fahrenheit(to_convert)
+            answer_statement = f"{to_convert} F is {answer} C"
+
+        # enable history export button as soon as we have a valid calculation
+        self.to_history_button.config(state=NORMAL)
+
+        self.answer_error.config(text=answer_statement)
+        self.all_calculations_list.append(answer_statement)
+        print(self.all_calculations_list)
 
 
-
-# main routine
+# Main Routine / Testing starts here
 if __name__ == "__main__":
     root = Tk()
     root.title("temperature converter")
