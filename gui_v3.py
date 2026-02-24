@@ -64,16 +64,8 @@ class Converter:
 
         #retrieve 'history / export' button and disable it at the start
         self.to_history_button = self.button_ref_list[3]
-        self.to_history_button = self.button_ref_list[3].config(state=DISABLED)
+        self.to_history_button.config(state=DISABLED)
 
-
-    def convert(self, min_temp, to_convert):
-
-        if min_temp == c.ABS_ZERO_CELSIUS:
-            self.answer_error.config(text=f"Converting {to_convert} C° to F°")
-        else:
-
-            self.answer_error.config(text=f"Converting {to_convert} F° to C°")
 
 
     def check_temp(self, min_temp):
@@ -102,10 +94,10 @@ class Converter:
             has_errors = "yes"
 
         # display the error if necessary
-        has_errors == "yes"
-        self.answer_error.config(text=error, fg="#9C0000", font=("Arial", 10, "bold"))
-        self.temp_entry.config(bg="#F4CCCC")
-        self.temp_entry.delete(0, END)
+        if has_errors == "yes":
+            self.answer_error.config(text=error, fg="#9C0000", font=("Arial", 10, "bold"))
+            self.temp_entry.config(bg="#F4CCCC")
+            self.temp_entry.delete(0, END)
 
 
     def convert(self, min_temp, to_convert):
@@ -122,7 +114,7 @@ class Converter:
         self.to_history_button.config(state=NORMAL)
 
         self.answer_error.config(text=answer_statement)
-        self.all_calculations_list.append(answer_statement)
+        self.all_calculations_list.append(answer)
         print(self.all_calculations_list)
 
 
